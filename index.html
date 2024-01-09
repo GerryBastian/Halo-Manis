@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boneka Animation</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #000; /* Warna hitam */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .background-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .boneka {
+            max-width: 30%;
+            height: auto;
+            border-radius: 10%;
+            transition: transform 0.5s ease-in-out;
+            animation: bounce 1s infinite alternate;
+            position: absolute; /* Menggunakan posisi absolut agar dapat menentukan top dan left */
+            top: 30px; /* Sesuaikan nilai ini sesuai keinginan Anda untuk menyesuaikan posisi vertikal */
+            left: 30%; /* Untuk menempatkan boneka di tengah secara horizontal */
+            transform: translateX(100%); /* Untuk menggeser boneka ke kiri sejauh setengah dari lebar boneka */
+        }
+
+/* ... (kode CSS lainnya tetap sama) */
+        @keyframes bounce {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .container {
+            position: relative;
+            margin-top: 50px; /* Sesuaikan nilai ini sesuai keinginan Anda untuk memberikan lebih banyak ruang di atas form */
+        }
+
+        form {
+            background-color: rgba(192, 192, 192, 0.7);
+            padding: 50px;
+            border-radius: 30px;
+            box-shadow: 0 0 80px rgba(183, 178, 178, 0.3);
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            margin-top: 0px; /* Sesuaikan nilai ini untuk memberikan lebih banyak ruang di bagian atas form silver */
+            margin-bottom: 70px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #000; /* Warna teks hitam */
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+            border: 2px solid #ccc; /* Warna border abu-abu dan ketebalan 2px */
+            border-radius: 8px; /* Membuat border lebih cekung */
+            background-color: rgba(255, 255, 255, 0.1); /* Warna latar belakang dengan transparansi 10% */
+            color: #000; /* Warna teks hitam */
+        }
+
+        button {
+            background-color: #ffffff; /* Warna kuning */
+            color: #000; /* Warna teks hitam */
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out; /* Animasi perpindahan tombol */
+        }
+
+        button:hover {
+            background-color: #ffffff; /* Warna kuning yang sedikit lebih gelap */
+        }
+
+        button.clicked {
+            transform: translateX(200%); /* Menggeser tombol ke kanan setelah diklik */
+        }
+
+        h2 {
+            margin-bottom: 30px;
+            color: #000; /* Warna teks hitam */
+            animation: fadeIn 2s ease-in-out;
+            margin-top: 90px;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .output-container {
+            position: absolute;
+            top: 92%;
+            left:50%;
+            transform: translate(-50%, -20%);
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        
+
+        .output {
+            margin-bottom: 10px;
+            color: #ffffff; /* Warna teks hitam */
+        }
+
+        .love {
+            font-size: 24px;
+            color: #ffffff; /* Warna merah */
+        }
+
+        .snowflake {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background-color: rgba(255, 255, 255, 0.7); /* Warna salju putih dengan transparansi 70% */
+            border-radius: 50%;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.8); /* Efek cahaya di sekitar salju */
+            pointer-events: none;
+            transform: translateZ(0); /* Efek 3D */
+            animation: fall 10s infinite linear;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotateZ(360deg); /* Efek putaran 3D */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-pattern"></div>
+    <div class="container">
+        <img class="boneka" src="https://i.pinimg.com/originals/65/43/3a/65433ac26a70947e77321763cfe76718.gif" alt="Boneka Sapi">
+        <form>
+            <h2>Hallo Manis!</h2>
+            <label for="name">Nama:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="birthdate">Tanggal Lahir:</label>
+            <input type="date" id="birthdate" name="birthdate" required>
+
+            <button type="button" id="submitButton" onclick="showZodiacGreeting()">Lanjutkan</button>
+        </form>
+
+        <!-- Output Container -->
+        <div class="output-container" id="output-container">
+            <div class="output" id="output"></div>
+            <div class="love">❤️</div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const body = document.querySelector("body");
+    
+            body.addEventListener("mousemove", function(e) {
+                const snowflake = document.createElement("div");
+                snowflake.classList.add("snowflake");
+                snowflake.style.left = e.pageX + "px";
+                snowflake.style.top = e.pageY + "px";
+    
+                body.appendChild(snowflake);
+    
+                setTimeout(() => {
+                    snowflake.remove();
+                }, 10000);
+            });
+        });
+    
+        function showZodiacGreeting() {
+            const name = document.getElementById('name').value;
+            const birthdate = document.getElementById('birthdate').value;
+            const zodiacInfo = getZodiacInfo(birthdate);
+            const outputContainer = document.getElementById('output-container');
+            const output = document.getElementById('output');
+            const love = document.querySelector('.love');
+    
+            if (zodiacInfo) {
+                output.innerHTML = `Hai ${name}! Zodiak Anda adalah ${zodiacInfo.sign}. ${zodiacInfo.description}`;
+            } else {
+                output.innerHTML = 'Tidak dapat menentukan zodiak.';
+            }
+    
+            outputContainer.style.opacity = 1;
+            love.style.opacity = 1;
+        }
+    
+        function getZodiacInfo(birthdate) {
+            const zodiacData = [
+                { sign: 'Aries', startDate: '03-21', endDate: '04-19', description: 'Penuh energi, berani, dan suka tantangan.' },
+                { sign: 'Taurus', startDate: '04-20', endDate: '05-20', description: 'Stabil, praktis, dan memiliki sifat keuletan.' },
+                { sign: 'Gemini', startDate: '05-21', endDate: '06-20', description: 'Adaptable, ramah, dan suka berkomunikasi.' },
+                { sign: 'Cancer', startDate: '06-21', endDate: '07-22', description: 'Penuh perasaan, protektif, dan memiliki kelembutan.' },
+                { sign: 'Leo', startDate: '07-23', endDate: '08-22', description: 'Berjiwa pemimpin, hangat, dan suka dihargai.' },
+                { sign: 'Virgo', startDate: '08-23', endDate: '09-22', description: 'Analitis, praktis, dan rajin bekerja.' },
+                { sign: 'Libra', startDate: '09-23', endDate: '10-22', description: 'Suka keindahan, harmonis, dan suka keadilan.' },
+                { sign: 'Scorpio', startDate: '10-23', endDate: '11-21', description: 'Intens, penuh semangat, dan memiliki kecerdasan emosional.' },
+                { sign: 'Sagittarius', startDate: '11-22', endDate: '12-21', description: 'Petualang, optimis, dan suka belajar.' },
+                { sign: 'Capricorn', startDate: '12-22', endDate: '01-19', description: 'Ambisius, praktis, dan memiliki disiplin tinggi.' },
+                { sign: 'Aquarius', startDate: '01-20', endDate: '02-17', description: 'Inovatif, sosial, dan suka memikirkan masa depan.' },
+                { sign: 'Pisces', startDate: '02-18', endDate: '03-19', description: 'Imajinatif, intuitif, dan penuh empati.' }
+            ];
+    
+            const birthMonthDay = birthdate.substring(5);
+    
+            return zodiacData.find(zodiac => {
+                return birthMonthDay >= zodiac.startDate && birthMonthDay <= zodiac.endDate;
+            });
+        }
+    </script>    
+</body>
+</html>
